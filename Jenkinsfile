@@ -38,5 +38,38 @@ pipeline {
                 }
             }
         }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh 'docker build -t sq-ecr-ecs .'
+                }
+            }
+        }
+        stage('Test Application') {
+            steps {
+                script {
+                    cript {
+                    def status = sh(script: 'curl -o /dev/null -s -w "%{http_code}" http://localhost:81', returnStdout: true).trim()
+                    if (status != '200') {
+                        error "Application is not working as expected! HTTP Status: ${status}"
+                    } else {
+                        echo 'Application is running successfully!'
+                    }
+                }
+            }
+        }
+
+    }
+    post { 
+        always {
+             sh 'docker stop test-apache || true'
+             sh 'docker rm test-apache || true'
+        }
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!' 
+        }   
     }
 }
