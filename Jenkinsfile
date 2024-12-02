@@ -14,7 +14,7 @@ pipeline {
                         -Dsonar.projectKey=SQ-ECR-ECS\
                         -Dsonar.projectName=SQ-ECR-ECS \
                         -Dsonar.projectVersion=1.0 \
-                        -Dsonar.sources=2113_earth/ \
+                        -Dsonar.sources=2087_kalay/ \
                         -Dsonar.language=web \
                         -Dsonar.sourceEncoding=UTF-8
                         '''
