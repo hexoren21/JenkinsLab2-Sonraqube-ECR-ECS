@@ -65,16 +65,16 @@ pipeline {
             }
         }
     }
-    post { 
-        always {
-             sh 'docker stop sq-ecr-ecs || true'
-             sh 'docker rm sq-ecr-ecs || true'
-        }
-        success {
-            echo 'Pipeline completed successfully!'
-        }
-        failure {
-            echo 'Pipeline failed!' 
-        }   
-    }
+    // post { 
+    //     always {
+    //          sh 'docker stop sq-ecr-ecs || true'
+    //          sh 'docker rm sq-ecr-ecs || true'
+    //     }
+    //     success {
+    //         echo 'Pipeline completed successfully!'
+    //     }
+    //     failure {
+    //         echo 'Pipeline failed!' 
+    //     }   
+    // }
 }
