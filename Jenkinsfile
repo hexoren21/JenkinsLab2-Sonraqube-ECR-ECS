@@ -47,8 +47,8 @@ pipeline {
         }
         stage('Run Docker Container') {
             steps {
-                sh 'docker stop sq-ecr-ecs || true'
-                sh 'docker rm sq-ecr-ecs || true'
+                // sh 'docker stop sq-ecr-ecs || true'
+                // sh 'docker rm sq-ecr-ecs || true'
                 sh 'docker run -d -p 81:80 --name sq-ecr-ecs sq-ecr-ecs'
             }
         }
