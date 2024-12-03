@@ -17,7 +17,7 @@ pipeline {
                         -Dsonar.sources=2087_kalay/ \
                         -Dsonar.language=web \
                         -Dsonar.sourceEncoding=UTF-8
-                        '''
+              '''
                 }
             }
         }
@@ -26,7 +26,6 @@ pipeline {
                 script {
                     echo 'Waiting for SonarQube to process the Quality Gate...'
                     sleep(time: 10, unit: 'SECONDS')
-
                     def qualityGate = waitForQualityGate()
                     if (qualityGate.status == 'ERROR' || qualityGate.status == 'FAILED') {
                         error "Pipeline failed: Quality Gate status is ${qualityGate.status}"
@@ -38,8 +37,7 @@ pipeline {
                 }
             }
         }
-        stage('Build Docker Image') {
-            
+        stage('Build Docker Image') {     
             steps {
                 script {
                     sh 'docker stop sq-ecr-ecs || true'
@@ -49,9 +47,7 @@ pipeline {
             }
         }
         stage('Run Docker Container') {
-            
-            steps {
-                
+            steps {         
                 sh 'docker run -d -p 81:80 --name sq-ecr-ecs sq-ecr-ecs'
             }
         }
@@ -68,16 +64,12 @@ pipeline {
             }
         }
     }
-    // post { 
-    //     always {
-    //          sh 'docker stop sq-ecr-ecs || true'
-    //          sh 'docker rm sq-ecr-ecs || true'
-    //     }
-    //     success {
-    //         echo 'Pipeline completed successfully!'
-    //     }
-    //     failure {
-    //         echo 'Pipeline failed!' 
-    //     }   
-    // }
+    post { 
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!' 
+        }   
+    }
 }
