@@ -39,33 +39,34 @@ pipeline {
             }
         }
         stage('Build Docker Image') {
-            agent { label 'Docker-server' }
+            
             steps {
                 script {
+                    sh 'docker stop sq-ecr-ecs || true'
+                    sh 'docker rm sq-ecr-ecs || true'
                     sh 'docker build -t sq-ecr-ecs .'
                 }
             }
         }
         stage('Run Docker Container') {
-            agent { label 'Docker-server' }
+            
             steps {
-                // sh 'docker stop sq-ecr-ecs || true'
-                // sh 'docker rm sq-ecr-ecs || true'
+                
                 sh 'docker run -d -p 81:80 --name sq-ecr-ecs sq-ecr-ecs'
             }
         }
-        // stage('Test Application') {
-        //     steps {
-        //         script {
-        //             def status = sh(script: 'curl -o /dev/null -s -w "%{http_code}" http://localhost:81', returnStdout: true).trim()
-        //             if (status != '200') {
-        //                 error "Application is not working as expected! HTTP Status: ${status}"
-        //             } else {
-        //                 echo 'Application is running successfully!'
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Test Application') {
+            steps {
+                script {
+                    def status = sh(script: 'curl -o /dev/null -s -w "%{http_code}" http://localhost:81', returnStdout: true).trim()
+                    if (status != '200') {
+                        error "Application is not working as expected! HTTP Status: ${status}"
+                    } else {
+                        echo 'Application is running successfully!'
+                    }
+                }
+            }
+        }
     }
     // post { 
     //     always {
