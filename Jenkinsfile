@@ -17,7 +17,7 @@ pipeline {
                         -Dsonar.sources=2087_kalay/ \
                         -Dsonar.language=web \
                         -Dsonar.sourceEncoding=UTF-8
-              '''
+                        '''
                 }
             }
         }
@@ -65,11 +65,11 @@ pipeline {
         }
     }
     post { 
-        success {
-            echo 'Pipeline completed successfully!'
+        always {
+            echo 'Slack Notifications.'
+            slackSend channel: '#decopscicd',
+                color: COLOR_MAP[currentBuild.currentResult],
+                message: '*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} \n More info at: ${env.BUILD_URL}'
         }
-        failure {
-            echo 'Pipeline failed!' 
-        }   
     }
 }
